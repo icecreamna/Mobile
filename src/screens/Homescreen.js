@@ -17,7 +17,7 @@ const HomeScreen = ({ navigation }) => {
                 <CustomButtom style = {styles.button}
                     title="Go to Time Screen"
                     onPress={() => { navigation.navigate('Time') }}
-                    backgroundColor='purple'
+                    backgroundColor='purple'//eieieieieiei
                 />
             </View>
         </View>
