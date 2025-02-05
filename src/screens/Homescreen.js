@@ -10,7 +10,7 @@ const HomeScreen = ({ navigation }) => {
             <Text style={styles.TextStyle}>List of Screen!</Text>
             <View style={styles.button}>
                 <CustomButtom style = {styles.button}
-                    title="Go to gpt Screen"dasdasdasdasdasdasdasd
+                    title="Go to gpt Screen"//eieieieiei
                     onPress={() => { navigation.navigate("gpt") }}
                     backgroundColor='grey'
                 />
