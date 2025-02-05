@@ -22,7 +22,7 @@ const HomeScreen = ({ navigation }) => {
             </View>
         </View>
     );//eieieieieeieieieieieei
-}
+}//eieieieieiei
 
 
 const styles = StyleSheet.create({
