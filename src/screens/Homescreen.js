@@ -21,7 +21,7 @@ const HomeScreen = ({ navigation }) => {
                 />
             </View>
         </View>
-    );
+    );//eieieieieeieieieieieei
 }
 
 
