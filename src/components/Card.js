@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Text, SafeAreaView, ScrollView, View, StyleSheet , TouchableOpacity} from 'react-native';
+import { Text, SafeAreaView, ScrollView, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { PaperProvider, Card, Button } from 'react-native-paper';
 
-const ItemCard = ({ image, title, price, onBuy, onEdit , onDelete}) => {
+const ItemCard = ({ image, title, price, onBuy, onEdit, onDelete }) => {
   return (
     <View>
       <PaperProvider>
@@ -15,15 +15,17 @@ const ItemCard = ({ image, title, price, onBuy, onEdit , onDelete}) => {
                 titleStyle={{ fontSize: 18, fontWeight: 'bold' }}
                 subtitleStyle={{ fontSize: 14 }}
               />
-              {image ? (
-                <Card.Cover
-                  style={{ margin: 10, borderRadius: 10 }}
-                  source={{ uri: image }}
-                />
-              ) : (
-                <Text style={styles.Textimage}>No Image Available</Text>
-              )}
-
+              <View style={styles.imageContainer}>
+                {image ? (
+                  <Card.Cover
+                    style={styles.coverImage}
+                    source={{ uri: image }}
+                    resizeMode="contain"
+                  />
+                ) : (
+                  <Text style={styles.Textimage}>No Image Available</Text>
+                )}
+              </View>
               <TouchableOpacity
                 style={styles.deleteButton}
                 onPress={onDelete}
@@ -59,6 +61,18 @@ const styles = StyleSheet.create({
   deleteText: {
     color: '#dc3545', // สีตัวอักษรของปุ่ม
     fontWeight: 'normal',
+  },
+  imageContainer: {  // Style for the image container
+    alignItems: 'center', // Center the image horizontally
+    marginBottom: 10, // Add some space below the image
+    marginTop: 10, // Add some space above the image
+  },
+  coverImage: {
+    width: '100%', // Make the image take full width of the card
+    height: 200, // Set a fixed height for the image or adjust as needed
+    borderRadius: 10,
+    backgroundColor:"white"
+
   },
 });
 

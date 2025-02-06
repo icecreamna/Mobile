@@ -18,17 +18,16 @@ const TextInputs = ({ width, placeholder, placeholderTextColor, backgroundColor,
 
 const styles = StyleSheet.create({
   input: {
-    marginTop: 10,
     borderWidth: 2,
     borderColor: '#294cdc',
     borderRadius: 27,
     padding: 10,
     fontSize: 16,
-    marginBottom: 5,
+    marginBottom: 10,
     alignItems: 'center',
     backgroundColor: 'white',
     color:'white',
-    maxHeight:50
+    maxHeight:45
   }
 });
 
