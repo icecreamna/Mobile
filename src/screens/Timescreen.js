@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, FlatList, TextInput } from 'react-native'
 import CustomButtom from "../components/custombutton";
 import TextInputs from "../components/customTextinput";
@@ -13,25 +13,45 @@ const Timescreen = () => {
   const [price, setprice] = useState('')
   const [img, setimg] = useState('')
 
-  const addCard = () => {
+  const addCard = async () => {
     if (!title.trim() || (price < 0)) {
       alert('กรุณากรอกค่า Title และ price ห้ามน้อยกว่า 0')
       return;
     }
-    
-    const newCard = { id: Date.now().toString(), title, price, img}
+
+    const newCard = { id: Date.now().toString(), title, price, img }
     const updateCard = [newCard, ...card]
     setcard(updateCard)
-    setTitle('')
-    setprice('')
-    setimg('')
+    setTitle("")
+    setprice("")
+    setimg("")
+    try {
+      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updateCard))
+    } catch (error) {
+      console.log("Error:", error)
+    }
   }
+
+  const loadCard = async () => {
+    try {
+        const storagedCard = await AsyncStorage.getItem(STORAGE_KEY)
+        if (storagedCard) {
+          const parsedCard = JSON.parse(storagedCard);
+          setcard(parsedCard);
+      }
+    } catch (error) {
+      console.log("Failed to load: ", error)
+    }
+  }
+
+  useEffect(() => {
+    loadCard()
+  }, [])
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>What name should it be?</Text>
       <TextInputs
-        style={styles.input}
         value={title}
         onChangeText={setTitle}
         placeholder="📦 Name of product"
@@ -40,7 +60,6 @@ const Timescreen = () => {
         backgroundColor='#2C3E50'
       />
       <TextInputs
-        style={styles.input}
         value={price}
         onChangeText={setprice}
         placeholder="💵 Price"
@@ -50,10 +69,10 @@ const Timescreen = () => {
         keyboardType='Numeric'
       />
       <TextInputs
-        style={styles.input}
         value={img}
         onChangeText={setimg}
         placeholder="🔗 Link img(if you have)"
+        multiline={true}
         placeholderTextColor='white'
         borderColor='#BDC3C7'
         backgroundColor='#2C3E50'
@@ -73,6 +92,8 @@ const Timescreen = () => {
               image={item.img}
               title={item.title}
               price={item.price}
+              onBuy={() => console.log("click buy")}
+              onEdit={() => console.log("click edit")}
             />
           )
         }}

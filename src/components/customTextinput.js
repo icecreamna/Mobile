@@ -2,7 +2,7 @@ import React from "react";
 import { View, TextInput, StyleSheet } from "react-native";
 
 
-const TextInputs = ({ width, placeholder, placeholderTextColor, backgroundColor, borderColor , onChangeText,keyboardType}) => {
+const TextInputs = ({ width, placeholder, placeholderTextColor, backgroundColor, borderColor , onChangeText,keyboardType ,value}) => {
   return (
     <View>
       <TextInput
@@ -10,7 +10,8 @@ const TextInputs = ({ width, placeholder, placeholderTextColor, backgroundColor,
         placeholderTextColor={placeholderTextColor}
         placeholder={placeholder}
         onChangeText={onChangeText} 
-        keyboardType={keyboardType}/>
+        keyboardType={keyboardType}
+        value={value}/>
     </View>
   );
 }
@@ -23,10 +24,11 @@ const styles = StyleSheet.create({
     borderRadius: 27,
     padding: 10,
     fontSize: 16,
-    marginBottom: 10,
+    marginBottom: 5,
     alignItems: 'center',
     backgroundColor: 'white',
-    color:'white'
+    color:'white',
+    maxHeight:50
   }
 });
 
