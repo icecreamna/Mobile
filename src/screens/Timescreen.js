@@ -12,6 +12,7 @@ const Timescreen = () => {
   const [title, setTitle] = useState('')
   const [price, setprice] = useState('')
   const [img, setimg] = useState('')
+  const [edit, setEdit] = useState(null)
 
   const addCard = async () => {
     if (!title.trim() || (price < 0)) {
@@ -34,72 +35,110 @@ const Timescreen = () => {
 
   const loadCard = async () => {
     try {
-        const storagedCard = await AsyncStorage.getItem(STORAGE_KEY)
-        if (storagedCard) {
-          const parsedCard = JSON.parse(storagedCard);
-          setcard(parsedCard);
+      const storagedCard = await AsyncStorage.getItem(STORAGE_KEY)
+      if (storagedCard) {
+        const parsedCard = JSON.parse(storagedCard);
+        setcard(parsedCard);
       }
     } catch (error) {
       console.log("Failed to load: ", error)
     }
   }
 
-  useEffect(() => {
-    loadCard()
-  }, [])
+  
+  const EditCard =  async (item) => {
+    setEdit(item.id)
+    setTitle(item.title);
+    setprice(item.price);
+    setimg(item.img)
+  }
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>What name should it be?</Text>
-      <TextInputs
-        value={title}
-        onChangeText={setTitle}
-        placeholder="📦 Name of product"
-        placeholderTextColor='white'
-        borderColor='#BDC3C7'
-        backgroundColor='#2C3E50'
-      />
-      <TextInputs
-        value={price}
-        onChangeText={setprice}
-        placeholder="💵 Price"
-        placeholderTextColor='white'
-        borderColor='#2C3E50'
-        backgroundColor='#27AE60'
-        keyboardType='Numeric'
-      />
-      <TextInputs
-        value={img}
-        onChangeText={setimg}
-        placeholder="🔗 Link img(if you have)"
-        multiline={true}
-        placeholderTextColor='white'
-        borderColor='#BDC3C7'
-        backgroundColor='#2C3E50'
-      />
-      <CustomButtom
-        backgroundColor='#28a745'
-        title='Add item'
-        fontWeight='bold'
-        onPress={addCard}
-      />
-      <FlatList
-        data={card}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => {
-          return (
-            <ItemCard
-              image={item.img}
-              title={item.title}
-              price={item.price}
-              onBuy={() => console.log("click buy")}
-              onEdit={() => console.log("click edit")}
-            />
-          )
-        }}
-      />
-    </View>
-  )
+  const updateCard = async () =>{
+    if (!title.trim() || (price < 0)) {
+      alert('กรุณากรอกค่า Title และ price ห้ามน้อยกว่า 0')
+      return;
+    }
+  const updatedCard = card.map((item) =>item.id === edit ? { ...item, title, price, img } : item);
+  setcard(updatedCard);
+  setTitle('');
+  setprice('');
+  setimg('');
+  setEdit(null);
+
+  try {
+    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedCard));
+  } catch (error) {
+    console.log('Error:', error);
+  }
+  }
+
+const deleteCard = async (id) => {
+  const newCards = card.filter((item) => item.id !== id)
+  setcard(newCards)
+  try {
+    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newCards))
+  } catch (error) {
+    console.log("Error:", error)
+  }
+}
+
+useEffect(() => {
+  loadCard()
+}, [])
+
+return (
+  <View style={styles.container}>
+    <Text style={styles.title}>What name should it be?</Text>
+    <TextInputs
+      value={title}
+      onChangeText={setTitle}
+      placeholder="📦 Name of product"
+      placeholderTextColor='white'
+      borderColor='#BDC3C7'
+      backgroundColor='#2C3E50'
+    />
+    <TextInputs
+      value={price}
+      onChangeText={setprice}
+      placeholder="💵 Price"
+      placeholderTextColor='white'
+      borderColor='#2C3E50'
+      backgroundColor='#27AE60'
+      keyboardType='Numeric'
+    />
+    <TextInputs
+      value={img}
+      onChangeText={setimg}
+      placeholder="🔗 Link img(if you have)"
+      multiline={true}
+      placeholderTextColor='white'
+      borderColor='#BDC3C7'
+      backgroundColor='#2C3E50'
+    />
+    <CustomButtom
+      backgroundColor='#28a745'
+      title={edit ? 'Save' : 'Add item'} 
+      fontWeight='bold'
+      onPress={edit ? updateCard : addCard}
+    />
+    <FlatList
+      data={card}
+      keyExtractor={(item) => item.id}
+      renderItem={({ item }) => {
+        return (
+          <ItemCard
+            image={item.img}
+            title={item.title}
+            price={item.price}
+            onBuy={() => console.log("click buy")}
+            onEdit={() => EditCard(item)}
+            onDelete={() => deleteCard(item.id)}
+          />
+        )
+      }}
+    />
+  </View>
+)
 }
 
 const styles = StyleSheet.create({
@@ -123,6 +162,5 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 })
-
 
 export default Timescreen
