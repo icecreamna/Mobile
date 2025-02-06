@@ -18,9 +18,8 @@ const Timescreen = () => {
       alert('กรุณากรอกค่า Title และ price ห้ามน้อยกว่า 0')
       return;
     }
-    const validImg = img.trim() ? img : 'https://via.placeholder.com/150';
-
-    const newCard = { id: Date.now().toString(), title, price, img:validImg }
+    
+    const newCard = { id: Date.now().toString(), title, price, img}
     const updateCard = [newCard, ...card]
     setcard(updateCard)
     setTitle('')
