@@ -13,15 +13,15 @@ const Timescreen = () => {
   const [price, setprice] = useState('')
   const [img, setimg] = useState('')
   const [edit, setEdit] = useState(null)
- 
+
 
   const addCard = async () => {
     if (!title.trim() || (price < 0)) {
       alert('กรุณากรอกค่า Title และ price ห้ามน้อยกว่า 0')
       return;
     }
-  
-    const newCard = { id: Date.now().toString(), title, price, img, Buy :false }
+
+    const newCard = { id: Date.now().toString(), title, price, img, Buy: false }
     const updateCard = [newCard, ...card]
     setcard(updateCard)
     setTitle("")
@@ -33,7 +33,7 @@ const Timescreen = () => {
       console.log("Error:", error)
     }
   }
-  
+
 
   const loadCard = async () => {
     try {
@@ -47,26 +47,26 @@ const Timescreen = () => {
     }
   }
 
-  const deleteCard =  (id) => {
+  const deleteCard = (id) => {
     Alert.alert(
       "Are you sure to delete?",
       "This item will go far away",
       [
-      {
-        text: "Cancel",
-      },
-      {
-        text: 'Sure',
-        onPress: async () => {
-          const newCards = card.filter((item) => item.id !== id)
-          setcard(newCards)
-          try {
-            await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newCards))
-          } catch (error) {
-            console.log("Error:", error)
+        {
+          text: "Cancel",
+        },
+        {
+          text: 'Sure',
+          onPress: async () => {
+            const newCards = card.filter((item) => item.id !== id)
+            setcard(newCards)
+            try {
+              await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newCards))
+            } catch (error) {
+              console.log("Error:", error)
+            }
           }
         }
-      }
       ]
     )
   }
@@ -95,24 +95,39 @@ const Timescreen = () => {
       console.log('Error:', error);
     }
   }
-  
-  const BuyCard = async (item) => {
-    const updatedCard = card.map((cardItem) => 
-      cardItem.id === item.id ? { ...cardItem, Buy: true } : cardItem
-    );
-    setcard(updatedCard); // update the state with the updated cards
-  
-    try {
-      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedCard)); // save to async storage
-    } catch (error) {
-      console.log('Error:', error);
-    }
-  };
-  
-  
-  
-  
 
+  const BuyCard = async (item) => {
+    Alert.alert(
+      "Are you sure to Buy?",
+      "This item will go in your heart and can't cancel anymore",
+      [
+        {
+          text: "Cancel",
+        },
+        {
+          text: 'Sure',
+          onPress: async () => {
+            const updatedCard = card.map((cardItem) =>
+              cardItem.id === item.id ? { ...cardItem, Buy: true } : cardItem
+            );
+            setcard(updatedCard); // update the state with the updated cards
+
+            try {
+              await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedCard)); // save to async storage
+            } catch (error) {
+              console.log('Error:', error);
+            }
+            setcard(newCards)
+            try {
+              await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newCards))
+            } catch (error) {
+              console.log("Error:", error)
+            }
+          }
+        }
+      ]
+    )
+  };
 
   useEffect(() => {
     loadCard()
@@ -165,7 +180,7 @@ const Timescreen = () => {
               Buy={item.Buy}
               onEdit={() => EditCard(item)}
               onDelete={() => deleteCard(item.id)}
-              onBuy={()=> BuyCard(item)}
+              onBuy={() => BuyCard(item)}
             />
           )
         }}
