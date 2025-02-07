@@ -39,7 +39,7 @@ const ItemCard = ({ image, title, price, onEdit, onDelete ,onBuy , Buy}) => {
                 <Button onPress={onBuy} disabled = {Buy}>
                   {Buy ? "Bought" : "Buy"}
                 </Button>
-                <Button onPress={onEdit}>Edit</Button>
+                <Button onPress={Buy ? onBuy : onEdit}>Edit</Button>
               </Card.Actions>
             </Card>
           </ScrollView>
