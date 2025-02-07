@@ -3,13 +3,13 @@ import { Text, SafeAreaView, ScrollView, View, StyleSheet, TouchableOpacity } fr
 import { PaperProvider, Card, Button } from 'react-native-paper';
 
 
-const ItemCard = ({ image, title, price, onEdit, onDelete ,onBuy , Buy}) => {  
+const ItemCard = ({ image, title, price, onEdit, onDelete, onBuy, Buy ,onCancel}) => {
   return (
     <View>
       <PaperProvider>
         <SafeAreaView style={{ flex: 1 }}>
           <ScrollView>
-            <Card style={Buy? styles.BoughtCard : styles.Normalcard}>
+            <Card style={Buy ? styles.BoughtCard : styles.Normalcard}>
               <Card.Title
                 title={title}
                 subtitle={Buy ? "Purchased" : 'Cost:' + price + '฿'}
@@ -36,8 +36,8 @@ const ItemCard = ({ image, title, price, onEdit, onDelete ,onBuy , Buy}) => {
               </TouchableOpacity>
 
               <Card.Actions>
-                <Button onPress={onBuy} disabled = {Buy}>
-                  {Buy ? "Bought" : "Buy"}
+                <Button onPress={Buy ? onCancel : onBuy}>
+                  {Buy ? "Cancel" : "Buy"}
                 </Button>
                 <Button onPress={Buy ? onBuy : onEdit}>Edit</Button>
               </Card.Actions>
@@ -77,11 +77,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "white"
   },
-  Normalcard:{
-    margin :20
+  Normalcard: {
+    margin: 20
   },
-  BoughtCard:{
-    margin:20,
+  BoughtCard: {
+    margin: 20,
     backgroundColor: '#e0ffe0'
   }
 });

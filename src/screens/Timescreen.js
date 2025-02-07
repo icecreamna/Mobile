@@ -54,6 +54,7 @@ const Timescreen = () => {
       [
         {
           text: "Cancel",
+          style: 'cancel'
         },
         {
           text: 'Sure',
@@ -97,96 +98,103 @@ const Timescreen = () => {
   }
 
   const BuyCard = async (item) => {
-    Alert.alert(
-      "Are you sure to Buy?",
-      "This item will go in your heart and can't cancel anymore",
-      [
-        {
-          text: "Cancel",
-        },
-        {
-          text: 'Sure',
-          onPress: async () => {
-            const updatedCard = card.map((cardItem) =>
-              cardItem.id === item.id ? { ...cardItem, Buy: true } : cardItem
-            );
-            setcard(updatedCard); // update the state with the updated cards
+    const updatedCard = card.map((cardItem) =>
+      cardItem.id === item.id ? { ...cardItem, Buy: true } : cardItem
+    );
+    setcard(updatedCard); // update the state with the updated cards
 
-            try {
-              await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedCard)); // save to async storage
-            } catch (error) {
-              console.log('Error:', error);
-            }
-            setcard(newCards)
-            try {
-              await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newCards))
-            } catch (error) {
-              console.log("Error:", error)
-            }
-          }
-        }
-      ]
-    )
-  };
+    try {
+      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedCard)); // save to async storage
+    } catch (error) {
+      console.log('Error:', error);
+    }
+    setcard(newCards)
+    try {
+      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newCards))
+    } catch (error) {
+      console.log("Error:", error)
+    }
+  }
 
-  useEffect(() => {
-    loadCard()
-  }, [])
+  const Cancelcard = async (item) => {
+    const updatedCard = card.map((cardItem) =>
+      cardItem.id === item.id ? { ...cardItem, Buy: false } : cardItem
+    );
+    setcard(updatedCard); // update the state with the updated cards
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>What name should it be?</Text>
-      <TextInputs
-        value={title}
-        onChangeText={setTitle}
-        placeholder="📦 Name of product"
-        placeholderTextColor='white'
-        borderColor='#BDC3C7'
-        backgroundColor='#2C3E50'
-      />
-      <TextInputs
-        value={price}
-        onChangeText={setprice}
-        placeholder="💵 Price"
-        placeholderTextColor='white'
-        borderColor='#2C3E50'
-        backgroundColor='#27AE60'
-        keyboardType='Numeric'
-      />
-      <TextInputs
-        value={img}
-        onChangeText={setimg}
-        placeholder="🔗 Link img(if you have)"
-        multiline={true}
-        placeholderTextColor='white'
-        borderColor='#BDC3C7'
-        backgroundColor='#2C3E50'
-      />
-      <CustomButtom
-        backgroundColor='#28a745'
-        title={edit ? 'Save' : 'Add item'}
-        fontWeight='bold'
-        onPress={edit ? updateCard : addCard}
-      />
-      <FlatList
-        data={card}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => {
-          return (
-            <ItemCard
-              image={item.img}
-              title={item.title}
-              price={item.price}
-              Buy={item.Buy}
-              onEdit={() => EditCard(item)}
-              onDelete={() => deleteCard(item.id)}
-              onBuy={() => BuyCard(item)}
-            />
-          )
-        }}
-      />
-    </View>
-  )
+    try {
+      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedCard)); // save to async storage
+    } catch (error) {
+      console.log('Error:', error);
+    }
+    setcard(newCards)
+    try {
+      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newCards))
+    } catch (error) {
+      console.log("Error:", error)
+    }
+  }
+
+useEffect(() => {
+  loadCard()
+}, [])
+
+return (
+  <View style={styles.container}>
+    <Text style={styles.title}>What name should it be?</Text>
+    <TextInputs
+      value={title}
+      onChangeText={setTitle}
+      placeholder="📦 Name of product"
+      placeholderTextColor='white'
+      borderColor='#BDC3C7'
+      backgroundColor='#2C3E50'
+    />
+    <TextInputs
+      value={price}
+      onChangeText={setprice}
+      placeholder="💵 Price"
+      placeholderTextColor='white'
+      borderColor='#2C3E50'
+      backgroundColor='#27AE60'
+      keyboardType='Numeric'
+    />
+    <TextInputs
+      value={img}
+      onChangeText={setimg}
+      placeholder="🔗 Link img(if you have)"
+      multiline={true}
+      placeholderTextColor='white'
+      borderColor='#BDC3C7'
+      backgroundColor='#2C3E50'
+    />
+    <CustomButtom
+      backgroundColor='#28a745'
+      title={edit ? 'Save' : 'Add item'}
+      fontWeight='bold'
+      onPress={edit ? updateCard : addCard}
+    />
+    <FlatList
+      data={card}
+      keyExtractor={(item) => item.id}
+      renderItem={({ item }) => {
+        return (
+          <ItemCard
+            image={item.img}
+            title={item.title}
+            price={item.price}
+            Buy={item.Buy}
+            onEdit={() => EditCard(item)}
+            onDelete={() => deleteCard(item.id)}
+            onBuy={() => BuyCard(item)}
+            onCancel={()=>Cancelcard(item)}
+          />
+        )
+      }}
+    />
+    <DeleteMediaModal/>
+  </View>
+)
 }
 
 const styles = StyleSheet.create({
@@ -208,6 +216,44 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 18,
     marginBottom: 10,
+  },
+  warningTitle: {
+    color: 'orange', // Or a suitable warning color
+    fontSize: 18,
+    marginBottom: 10,
+    textAlign: 'center' // Center the title
+  },
+  message: {
+    fontSize: 16,
+    marginBottom: 20,
+    textAlign: 'center' // Center the message
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around', // Distribute buttons evenly
+  },
+  cancelButton: {
+    backgroundColor: '#D3D3D3', // Light gray
+    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    marginRight: 10, // Add spacing between buttons
+  },
+  cancelButtonText: {
+    color: 'black',
+    fontSize: 16,
+    textAlign: 'center'
+  },
+  deleteButton: {
+    backgroundColor: 'red', // Or a suitable delete color
+    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+  },
+  deleteButtonText: {
+    color: 'white',
+    fontSize: 16,
+    textAlign: 'center'
   },
 })
 
