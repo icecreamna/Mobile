@@ -2,7 +2,8 @@ import * as React from 'react';
 import { Text, SafeAreaView, ScrollView, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { PaperProvider, Card, Button } from 'react-native-paper';
 
-const ItemCard = ({ image, title, price, onBuy, onEdit, onDelete }) => {
+
+const ItemCard = ({ image, title, price, onEdit, onDelete ,onBuy , Buy}) => {  
   return (
     <View>
       <PaperProvider>
@@ -11,9 +12,10 @@ const ItemCard = ({ image, title, price, onBuy, onEdit, onDelete }) => {
             <Card style={{ margin: 20 }}>
               <Card.Title
                 title={title}
-                subtitle={'Cost:' + price + '฿'}
+                subtitle={Buy ? "Purchased" : 'Cost:' + price + '฿'}
                 titleStyle={{ fontSize: 18, fontWeight: 'bold' }}
                 subtitleStyle={{ fontSize: 14 }}
+
               />
               <View style={styles.imageContainer}>
                 {image ? (
@@ -34,7 +36,9 @@ const ItemCard = ({ image, title, price, onBuy, onEdit, onDelete }) => {
               </TouchableOpacity>
 
               <Card.Actions>
-                <Button onPress={onBuy}>Buy</Button>
+                <Button onPress={onBuy} >
+                  {Buy ? "Bought" : "Buy"}
+                </Button>
                 <Button onPress={onEdit}>Edit</Button>
               </Card.Actions>
             </Card>
@@ -71,9 +75,9 @@ const styles = StyleSheet.create({
     width: '100%', // Make the image take full width of the card
     height: 200, // Set a fixed height for the image or adjust as needed
     borderRadius: 10,
-    backgroundColor:"white"
-
+    backgroundColor: "white"
   },
 });
+
 
 export default ItemCard;
