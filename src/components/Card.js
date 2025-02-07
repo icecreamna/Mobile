@@ -9,7 +9,7 @@ const ItemCard = ({ image, title, price, onEdit, onDelete ,onBuy , Buy}) => {
       <PaperProvider>
         <SafeAreaView style={{ flex: 1 }}>
           <ScrollView>
-            <Card style={{ margin: 20 }}>
+            <Card style={Buy? styles.BoughtCard : styles.Normalcard}>
               <Card.Title
                 title={title}
                 subtitle={Buy ? "Purchased" : 'Cost:' + price + '฿'}
@@ -36,7 +36,7 @@ const ItemCard = ({ image, title, price, onEdit, onDelete ,onBuy , Buy}) => {
               </TouchableOpacity>
 
               <Card.Actions>
-                <Button onPress={onBuy} >
+                <Button onPress={onBuy} disabled = {Buy}>
                   {Buy ? "Bought" : "Buy"}
                 </Button>
                 <Button onPress={onEdit}>Edit</Button>
@@ -77,6 +77,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "white"
   },
+  Normalcard:{
+    margin :20
+  },
+  BoughtCard:{
+    margin:20,
+    backgroundColor: '#e0ffe0'
+  }
 });
 
 
