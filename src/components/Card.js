@@ -3,7 +3,7 @@ import { Text, SafeAreaView, ScrollView, View, StyleSheet, TouchableOpacity } fr
 import { PaperProvider, Card, Button } from 'react-native-paper';
 
 
-const ItemCard = ({ image, title, price, onEdit, onDelete, onBuy, Buy ,onCancel}) => {
+const ItemCard = ({ image, title, price, onEdit, onDelete, onBuy, Buy, onCancel }) => {
   return (
     <View>
       <PaperProvider>
@@ -39,7 +39,7 @@ const ItemCard = ({ image, title, price, onEdit, onDelete, onBuy, Buy ,onCancel}
                 <Button onPress={Buy ? onCancel : onBuy}>
                   {Buy ? "Cancel" : "Buy"}
                 </Button>
-                <Button onPress={Buy ? onBuy : onEdit}>Edit</Button>
+                <Button onPress={Buy ? onBuy : onEdit} >Edit</Button>
               </Card.Actions>
             </Card>
           </ScrollView>
@@ -83,7 +83,21 @@ const styles = StyleSheet.create({
   BoughtCard: {
     margin: 20,
     backgroundColor: '#e0ffe0'
-  }
+  },
+  clearButton: {
+    position: 'absolute', // ทำให้ปุ่มอยู่ที่ตำแหน่งคงที่
+    bottom: 20, // เว้นจากขอบล่าง
+    left: 20, // เว้นจากขอบซ้าย
+    backgroundColor: '#007bff', // สีพื้นหลังของปุ่ม
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+  },
+  clearButtonText: {
+    color: 'white', // สีตัวอักษรของปุ่ม
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
 });
 
 

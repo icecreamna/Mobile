@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, FlatList, TextInput, Alert } from 'react-native'
-import CustomButtom from "../components/custombutton";
+import Custombutton from "../components/custombutton";
 import TextInputs from "../components/customTextinput";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ItemCard from "../components/Card";
+import TotalPrice from "../components/Totalsummary";
 
 const STORAGE_KEY = '@card_data'
 
@@ -135,66 +136,88 @@ const Timescreen = () => {
     }
   }
 
-useEffect(() => {
-  loadCard()
-}, [])
+  const ClearAlldelete = async () => {
+    setcard([])
+    try {
+      await AsyncStorage.clear()
+    } catch (error) {
+      console.log('Error:', error);
+    }
+  }
 
-return (
-  <View style={styles.container}>
-    <Text style={styles.title}>What name should it be?</Text>
-    <TextInputs
-      value={title}
-      onChangeText={setTitle}
-      placeholder="📦 Name of product"
-      placeholderTextColor='white'
-      borderColor='#BDC3C7'
-      backgroundColor='#2C3E50'
-    />
-    <TextInputs
-      value={price}
-      onChangeText={setprice}
-      placeholder="💵 Price"
-      placeholderTextColor='white'
-      borderColor='#2C3E50'
-      backgroundColor='#27AE60'
-      keyboardType='Numeric'
-    />
-    <TextInputs
-      value={img}
-      onChangeText={setimg}
-      placeholder="🔗 Link img(if you have)"
-      multiline={true}
-      placeholderTextColor='white'
-      borderColor='#BDC3C7'
-      backgroundColor='#2C3E50'
-    />
-    <CustomButtom
-      backgroundColor='#28a745'
-      title={edit ? 'Save' : 'Add item'}
-      fontWeight='bold'
-      onPress={edit ? updateCard : addCard}
-    />
-    <FlatList
-      data={card}
-      keyExtractor={(item) => item.id}
-      renderItem={({ item }) => {
-        return (
-          <ItemCard
-            image={item.img}
-            title={item.title}
-            price={item.price}
-            Buy={item.Buy}
-            onEdit={() => EditCard(item)}
-            onDelete={() => deleteCard(item.id)}
-            onBuy={() => BuyCard(item)}
-            onCancel={()=>Cancelcard(item)}
-          />
-        )
-      }}
-    />
-    <DeleteMediaModal/>
-  </View>
-)
+
+
+  useEffect(() => {
+    loadCard()
+  }, [card])
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>What name should it be?</Text>
+      <TextInputs
+        value={title}
+        onChangeText={setTitle}
+        placeholder="📦 Name of product"
+        placeholderTextColor='white'
+        borderColor='#BDC3C7'
+        backgroundColor='#2C3E50'
+      />
+      <TextInputs
+        value={price}
+        onChangeText={setprice}
+        placeholder="💵 Price"
+        placeholderTextColor='white'
+        borderColor='#2C3E50'
+        backgroundColor='#27AE60'
+        keyboardType='Numeric'
+      />
+      <TextInputs
+        value={img}
+        onChangeText={setimg}
+        placeholder="🔗 Link img(if you have)"
+        multiline={true}
+        placeholderTextColor='white'
+        borderColor='#BDC3C7'
+        backgroundColor='#2C3E50'
+      />
+      <Custombutton
+        backgroundColor='#28a745'
+        title={edit ? 'Save' : 'Add item'}
+        fontWeight='bold'
+        onPress={edit ? updateCard : addCard}
+      />
+
+      <FlatList
+        data={card}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => {
+          return (
+            <ItemCard
+              image={item.img}
+              title={item.title}
+              price={item.price}
+              Buy={item.Buy}
+              edit={item.edit}
+              onEdit={() => EditCard(item)}
+              onDelete={() => deleteCard(item.id)}
+              onBuy={() => BuyCard(item)}
+              onCancel={() => Cancelcard(item)}
+            />
+          )
+        }}
+      />
+      <TotalPrice
+        cards = {card}
+      />
+      <Custombutton
+        backgroundColor='#dc3545'
+        title="Clear All"
+        fontWeight="bold"
+        style={styles.clearAllButton}
+        onPress={ClearAlldelete}
+      />
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
@@ -217,44 +240,16 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 10,
   },
-  warningTitle: {
-    color: 'orange', // Or a suitable warning color
-    fontSize: 18,
-    marginBottom: 10,
-    textAlign: 'center' // Center the title
-  },
-  message: {
-    fontSize: 16,
-    marginBottom: 20,
-    textAlign: 'center' // Center the message
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around', // Distribute buttons evenly
-  },
-  cancelButton: {
-    backgroundColor: '#D3D3D3', // Light gray
-    borderRadius: 5,
+  clearAllButton: {
+    position: 'absolute', // ทำให้ปุ่มอยู่ที่ตำแหน่งคงที่
+    bottom: 20, // เว้นจากขอบล่าง
+    left: 20, // เว้นจากขอบซ้าย
+    backgroundColor: '#007bff', // สีพื้นหลังของปุ่ม
     paddingVertical: 10,
     paddingHorizontal: 20,
-    marginRight: 10, // Add spacing between buttons
+    borderRadius: 20,
   },
-  cancelButtonText: {
-    color: 'black',
-    fontSize: 16,
-    textAlign: 'center'
-  },
-  deleteButton: {
-    backgroundColor: 'red', // Or a suitable delete color
-    borderRadius: 5,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-  },
-  deleteButtonText: {
-    color: 'white',
-    fontSize: 16,
-    textAlign: 'center'
-  },
+
 })
 
 export default Timescreen
