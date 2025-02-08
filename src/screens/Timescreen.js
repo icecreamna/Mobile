@@ -17,7 +17,7 @@ const Timescreen = () => {
 
 
   const addCard = async () => {
-    if (!title.trim() || (price < 0)) {
+    if (!title.trim() || (price < 0) || (!parseFloat(price)) ) {
       alert('กรุณากรอกค่า Title และ price ห้ามน้อยกว่า 0')
       return;
     }
@@ -48,18 +48,7 @@ const Timescreen = () => {
     }
   }
 
-  const deleteCard = (id) => {
-    Alert.alert(
-      "Are you sure to delete?",
-      "This item will go far away",
-      [
-        {
-          text: "Cancel",
-          style: 'cancel'
-        },
-        {
-          text: 'Sure',
-          onPress: async () => {
+  const deleteCard = async (id) => {
             const newCards = card.filter((item) => item.id !== id)
             setcard(newCards)
             try {
@@ -68,10 +57,6 @@ const Timescreen = () => {
               console.log("Error:", error)
             }
           }
-        }
-      ]
-    )
-  }
 
   const EditCard = async (item) => {
     setEdit(item.id)
