@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList, TextInput, Alert, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, FlatList, Switch, TouchableOpacity } from 'react-native'
 import Custombutton from "../components/custombutton";
 import TextInputs from "../components/customTextinput";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -16,7 +16,7 @@ const Timescreen = () => {
   const [edit, setEdit] = useState(null)
   const [filterGood, setfilterGood] = useState(card)
   const [Key, setKey] = useState('')
-  const [isModeVisible, setModeVisible] = useState(false);
+  // const [isModeVisible, setModeVisible] = useState(false);
   const [Darkmode, setDarkmode] = useState(false)
 
 
@@ -27,12 +27,12 @@ const Timescreen = () => {
     )
     setfilterGood(g)
   }
-  const [backgroundColor, setBackgroundColor] = useState('white')
-  const changeTheme = () => {
-    setDarkmode(!Darkmode)
-    setModeVisible(false)
-    setBackgroundColor(Darkmode ? "white" : "#212121");
-  }
+  // const [backgroundColor, setBackgroundColor] = useState('white')
+  // const changeTheme = () => {
+  //   setDarkmode(!Darkmode)
+  //   setModeVisible(false)
+  //   setBackgroundColor(Darkmode ? "white" : "#212121");
+  // }
 
   const addCard = async () => {
     if (!title.trim() || (price < 0) || (!parseFloat(price))) {
@@ -166,10 +166,16 @@ const Timescreen = () => {
   }, [card]);
 
   return (
-    <View style={[styles.container, {backgroundColor}]}>
-      <TouchableOpacity onPress={changeTheme} style={styles.toggleButton}> 
-       <Text style={Darkmode? styles.darktitle:styles.title}>Mode</Text>{/* Use TouchableOpacity */}
-      </TouchableOpacity>
+    <View style={Darkmode? styles.darkcontainer : styles.container}>
+      {/* <TouchableOpacity onPress={changeTheme} style={styles.toggleButton}>  */}
+      <Switch 
+      value={Darkmode}
+      onValueChange={(value)=>{setDarkmode(value)}
+      
+    }
+      />
+       <Text style={Darkmode? styles.darktitle:styles.title}>What should I name it?</Text>{/* Use TouchableOpacity */}
+      {/* </TouchableOpacity> */}
       <TextInputs
         value={title}
         onChangeText={setTitle}
@@ -251,6 +257,11 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: '#f5f5f5',
+  },
+  darkcontainer: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#212121',
   },
   title: {
     fontSize: 24,
