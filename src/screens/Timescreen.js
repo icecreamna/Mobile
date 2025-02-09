@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList, TextInput, Alert } from 'react-native'
-import Custombutton from "../components/custombutton";
+import { View, Text, StyleSheet, FlatList, TextInput, Alert, TouchableOpacity } from 'react-native'
+import  Custombutton  from "../components/custombutton";
 import TextInputs from "../components/customTextinput";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ItemCard from "../components/Card";
@@ -14,21 +14,28 @@ const Timescreen = () => {
   const [price, setprice] = useState('')
   const [img, setimg] = useState('')
   const [edit, setEdit] = useState(null)
-  const [filterGood , setfilterGood] = useState(card)
-  const [Key , setKey] = useState('')
+  const [filterGood, setfilterGood] = useState(card)
+  const [Key, setKey] = useState('')
+  const [isModeVisible, setModeVisible] = useState(false);
+  const [Darkmode, setDarkmode] = useState(false)
 
 
   const searchGood = (text) => {
-      setKey(text)
-      const g = card.filter((good)=>good.title.toLowerCase().includes(text.toLowerCase())
+    setKey(text)
+    const g = card.filter((good) => good.title.toLowerCase().includes(text.toLowerCase())
 
     )
     setfilterGood(g)
   }
-
+  const [backgroundColor, setBackgroundColor] = useState('white')
+  const changeTheme = () => {
+    setDarkmode(!Darkmode)
+    setModeVisible(false)
+    setBackgroundColor(Darkmode ? "white" : "#212121");
+  }
 
   const addCard = async () => {
-    if (!title.trim() || (price < 0) || (!parseFloat(price)) ) {
+    if (!title.trim() || (price < 0) || (!parseFloat(price))) {
       alert('กรุณากรอกค่า Title และ price ห้ามน้อยกว่า 0')
       return;
     }
@@ -60,14 +67,14 @@ const Timescreen = () => {
   }
 
   const deleteCard = async (id) => {
-            const newCards = card.filter((item) => item.id !== id)
-            setcard(newCards)
-            try {
-              await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newCards))
-            } catch (error) {
-              console.log("Error:", error)
-            }
-          }
+    const newCards = card.filter((item) => item.id !== id)
+    setcard(newCards)
+    try {
+      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newCards))
+    } catch (error) {
+      console.log("Error:", error)
+    }
+  }
 
   const EditCard = async (item) => {
     setEdit(item.id)
@@ -142,12 +149,12 @@ const Timescreen = () => {
   }
 
   const TotalCost = () => {
-      // Calculate the total price for unpurchased items
-      const totalCost = card
-        .filter((item) => !item.Buy) // Filter out purchased items
-        .reduce((total, item) => total + parseFloat(item.price), 0) // Sum prices
-        .toFixed(2); // Format the total price to 2 decimal places
-      return totalCost
+    // Calculate the total price for unpurchased items
+    const totalCost = card
+      .filter((item) => !item.Buy) // Filter out purchased items
+      .reduce((total, item) => total + parseFloat(item.price), 0) // Sum prices
+      .toFixed(2); // Format the total price to 2 decimal places
+    return totalCost
   }
 
   useEffect(() => {
@@ -156,11 +163,16 @@ const Timescreen = () => {
 
   useEffect(() => {
     searchGood(Key);
-}, [card]);
+  }, [card]);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>What name should it be?</Text>
+    <View style={[styles.container,{backgroundColor}]}>
+      <Text style={styles.title}>Shopping Maybe</Text>
+      <Custombutton
+        title='Change a Theme'
+        backgroundColor="#0D47A1"
+        onPress={() => changeTheme()}
+      />
       <TextInputs
         value={title}
         onChangeText={setTitle}
@@ -223,7 +235,7 @@ const Timescreen = () => {
         keyboardType='Numeric'
       />
       <TotalPrice
-        totalCost = {TotalCost()}
+        totalCost={TotalCost()}
       />
       <Custombutton
         backgroundColor='#dc3545'
