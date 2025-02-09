@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, FlatList, TextInput, Alert, TouchableOpacity } from 'react-native'
-import  Custombutton  from "../components/custombutton";
+import Custombutton from "../components/custombutton";
 import TextInputs from "../components/customTextinput";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ItemCard from "../components/Card";
@@ -166,13 +166,10 @@ const Timescreen = () => {
   }, [card]);
 
   return (
-    <View style={[styles.container,{backgroundColor}]}>
-      <Text style={Darkmode ? styles.darktitle:styles.title}>Shopping Maybe</Text>
-      <Custombutton
-        title='Change a Theme'
-        backgroundColor="#0D47A1"
-        onPress={() => changeTheme()}
-      />
+    <View style={[styles.container, {backgroundColor}]}>
+      <TouchableOpacity onPress={changeTheme} style={styles.toggleButton}> 
+       <Text style={Darkmode? styles.darktitle:styles.title}>Mode</Text>{/* Use TouchableOpacity */}
+      </TouchableOpacity>
       <TextInputs
         value={title}
         onChangeText={setTitle}
@@ -236,7 +233,7 @@ const Timescreen = () => {
       />
       <TotalPrice
         totalCost={TotalCost()}
-        darkmode = {Darkmode}
+        darkmode={Darkmode}
       />
       <Custombutton
         backgroundColor='#dc3545'
@@ -261,12 +258,12 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textAlign: 'center',
   },
-  darktitle:{
+  darktitle: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10,
     textAlign: 'center',
-    color:'white'
+    color: 'white'
   },
   input: {
     borderWidth: 1,
@@ -285,7 +282,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 20,
   },
-
+  toggleButton: {
+    width: 80, // Adjust size as needed
+    height: 40, // Adjust size as needed
+    borderRadius: 20, // Make it round if you like
+    backgroundColor: 'transparent', // Or any background color you want
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20, //Example margin
+    alignSelf: 'center', // Center the button
+    borderWidth: 1, // Add border if needed
+    borderColor: 'gray', // Border color
+  },
 })
 
 export default Timescreen
