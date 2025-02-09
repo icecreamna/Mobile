@@ -167,7 +167,7 @@ const Timescreen = () => {
 
   return (
     <View style={[styles.container,{backgroundColor}]}>
-      <Text style={styles.title}>Shopping Maybe</Text>
+      <Text style={Darkmode ? styles.darktitle:styles.title}>Shopping Maybe</Text>
       <Custombutton
         title='Change a Theme'
         backgroundColor="#0D47A1"
@@ -236,6 +236,7 @@ const Timescreen = () => {
       />
       <TotalPrice
         totalCost={TotalCost()}
+        darkmode = {Darkmode}
       />
       <Custombutton
         backgroundColor='#dc3545'
@@ -259,6 +260,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
     textAlign: 'center',
+  },
+  darktitle:{
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    textAlign: 'center',
+    color:'white'
   },
   input: {
     borderWidth: 1,
