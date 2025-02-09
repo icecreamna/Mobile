@@ -21,8 +21,8 @@ const HomeScreen = ({ navigation }) => {
                 />
             </View>
         </View>
-    );
-}
+    );//eieieieieeieieieieieei
+}//eieieieieieiposdjfdklfhgnkfjgdfkghjdftg
 
 
 const styles = StyleSheet.create({
