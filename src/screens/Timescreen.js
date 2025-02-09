@@ -14,6 +14,17 @@ const Timescreen = () => {
   const [price, setprice] = useState('')
   const [img, setimg] = useState('')
   const [edit, setEdit] = useState(null)
+  const [filterGood , setfilterGood] = useState(card)
+  const [Key , setKey] = useState('')
+
+
+  const searchGood = (text) => {
+      setKey(text)
+      const g = card.filter((good)=>good.title.toLowerCase().includes(text.toLowerCase())
+
+    )
+    setfilterGood(g)
+  }
 
 
   const addCard = async () => {
@@ -130,11 +141,22 @@ const Timescreen = () => {
     }
   }
 
-
+  const TotalCost = () => {
+      // Calculate the total price for unpurchased items
+      const totalCost = card
+        .filter((item) => !item.Buy) // Filter out purchased items
+        .reduce((total, item) => total + parseFloat(item.price), 0) // Sum prices
+        .toFixed(2); // Format the total price to 2 decimal places
+      return totalCost
+  }
 
   useEffect(() => {
     loadCard()
-  }, [card])
+  }, [])
+
+  useEffect(() => {
+    searchGood(Key);
+}, [card]);
 
   return (
     <View style={styles.container}>
@@ -173,7 +195,7 @@ const Timescreen = () => {
       />
 
       <FlatList
-        data={card}
+        data={filterGood}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => {
           return (
@@ -191,8 +213,17 @@ const Timescreen = () => {
           )
         }}
       />
+      <TextInputs
+        value={Key}
+        onChangeText={searchGood}
+        placeholder="🔎 Search by Title"
+        placeholderTextColor='white'
+        borderColor='#BDC3C7'
+        backgroundColor='#2C3E50'
+        keyboardType='Numeric'
+      />
       <TotalPrice
-        cards = {card}
+        totalCost = {TotalCost()}
       />
       <Custombutton
         backgroundColor='#dc3545'
