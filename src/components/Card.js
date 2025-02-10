@@ -6,18 +6,18 @@ const ItemCard = ({ image, title, price, onEdit, onDelete, onBuy, Buy, onCancel 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   // ฟังก์ชันจัดการการแสดงผลของ Modal
-  const handleDeletePress = () => {
-    setIsModalVisible(true); // เปิด Modal
-  };
+  // const handleDeletePress = () => {
+  //   setIsModalVisible(true); // เปิด Modal
+  // };
 
-  const handleCancelModal = () => {
-    setIsModalVisible(false); // ปิด Modal
-  };
+  // const handleCancelModal = () => {
+  //   setIsModalVisible(false); // ปิด Modal
+  // };
 
-  const handleConfirmDelete = () => {
-    onDelete(); // เรียกฟังก์ชัน onDelete
-    setIsModalVisible(false); // ปิด Modal หลังจากการยืนยันการลบ
-  };
+  // const handleConfirmDelete = () => {
+  //   onDelete(); // เรียกฟังก์ชัน onDelete
+  //   setIsModalVisible(false); // ปิด Modal หลังจากการยืนยันการลบ
+  // };
 
   return (
     <View>
@@ -45,7 +45,7 @@ const ItemCard = ({ image, title, price, onEdit, onDelete, onBuy, Buy, onCancel 
 
               <TouchableOpacity
                 style={styles.deleteButton}
-                onPress={handleDeletePress} // ใช้ฟังก์ชันที่แก้ไขแล้ว
+                onPress={()=>setIsModalVisible(true)} // ใช้ฟังก์ชันที่แก้ไขแล้ว
               >
                 <Text style={styles.deleteText}>Delete</Text>
               </TouchableOpacity>
@@ -69,13 +69,17 @@ const ItemCard = ({ image, title, price, onEdit, onDelete, onBuy, Buy, onCancel 
             <View style={styles.buttonsContainer}>
               <TouchableOpacity
                 style={{ ...styles.openButton, backgroundColor: 'grey', marginRight: 10 }}
-                onPress={handleCancelModal} // ปิด Modal
+                onPress={()=>setIsModalVisible(false)} // ปิด Modal
               >
                 <Text style={styles.textStyle}>Cancel</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={{ ...styles.openButton, backgroundColor: '#f44336' }}
-                onPress={handleConfirmDelete} // เรียกฟังก์ชันลบ
+                onPress={()=>{
+                  onDelete()
+                  setIsModalVisible(false)
+
+                }} // เรียกฟังก์ชันลบ
               >
                 <Text style={styles.textStyle}>Delete</Text>
               </TouchableOpacity>

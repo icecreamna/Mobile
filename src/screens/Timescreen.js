@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList, TextInput, Alert } from 'react-native'
+import { View, Text, StyleSheet, FlatList, Switch, TouchableOpacity } from 'react-native'
 import Custombutton from "../components/custombutton";
 import TextInputs from "../components/customTextinput";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -14,10 +14,28 @@ const Timescreen = () => {
   const [price, setprice] = useState('')
   const [img, setimg] = useState('')
   const [edit, setEdit] = useState(null)
+  const [filterGood, setfilterGood] = useState(card)
+  const [Key, setKey] = useState('')
+  // const [isModeVisible, setModeVisible] = useState(false);
+  const [Darkmode, setDarkmode] = useState(false)
 
+
+  const searchGood = (text) => {
+    setKey(text)
+    const g = card.filter((good) => good.title.toLowerCase().includes(text.toLowerCase())
+
+    )
+    setfilterGood(g)
+  }
+  // const [backgroundColor, setBackgroundColor] = useState('white')
+  // const changeTheme = () => {
+  //   setDarkmode(!Darkmode)
+  //   setModeVisible(false)
+  //   setBackgroundColor(Darkmode ? "white" : "#212121");
+  // }
 
   const addCard = async () => {
-    if (!title.trim() || (price < 0) || (!parseFloat(price)) ) {
+    if (!title.trim() || (price < 0) || (!parseFloat(price))) {
       alert('กรุณากรอกค่า Title และ price ห้ามน้อยกว่า 0')
       return;
     }
@@ -49,14 +67,14 @@ const Timescreen = () => {
   }
 
   const deleteCard = async (id) => {
-            const newCards = card.filter((item) => item.id !== id)
-            setcard(newCards)
-            try {
-              await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newCards))
-            } catch (error) {
-              console.log("Error:", error)
-            }
-          }
+    const newCards = card.filter((item) => item.id !== id)
+    setcard(newCards)
+    try {
+      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newCards))
+    } catch (error) {
+      console.log("Error:", error)
+    }
+  }
 
   const EditCard = async (item) => {
     setEdit(item.id)
@@ -130,15 +148,34 @@ const Timescreen = () => {
     }
   }
 
-
+  const TotalCost = () => {
+    // Calculate the total price for unpurchased items
+    const totalCost = card
+      .filter((item) => !item.Buy) // Filter out purchased items
+      .reduce((total, item) => total + parseFloat(item.price), 0) // Sum prices
+      .toFixed(2); // Format the total price to 2 decimal places
+    return totalCost
+  }
 
   useEffect(() => {
     loadCard()
-  }, [card])
+  }, [])
+
+  useEffect(() => {
+    searchGood(Key);
+  }, [card]);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>What name should it be?</Text>
+    <View style={Darkmode? styles.darkcontainer : styles.container}>
+      {/* <TouchableOpacity onPress={changeTheme} style={styles.toggleButton}>  */}
+      <Switch 
+      value={Darkmode}
+      onValueChange={(value)=>{setDarkmode(value)}
+      
+    }
+      />
+       <Text style={Darkmode? styles.darktitle:styles.title}>What should I name it?</Text>{/* Use TouchableOpacity */}
+      {/* </TouchableOpacity> */}
       <TextInputs
         value={title}
         onChangeText={setTitle}
@@ -173,7 +210,7 @@ const Timescreen = () => {
       />
 
       <FlatList
-        data={card}
+        data={filterGood}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => {
           return (
@@ -191,8 +228,18 @@ const Timescreen = () => {
           )
         }}
       />
+      <TextInputs
+        value={Key}
+        onChangeText={searchGood}
+        placeholder="🔎 Search by Title"
+        placeholderTextColor='white'
+        borderColor='#BDC3C7'
+        backgroundColor='#2C3E50'
+        keyboardType='Numeric'
+      />
       <TotalPrice
-        cards = {card}
+        totalCost={TotalCost()}
+        darkmode={Darkmode}
       />
       <Custombutton
         backgroundColor='#dc3545'
@@ -211,11 +258,23 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#f5f5f5',
   },
+  darkcontainer: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#212121',
+  },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10,
     textAlign: 'center',
+  },
+  darktitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    textAlign: 'center',
+    color: 'white'
   },
   input: {
     borderWidth: 1,
@@ -234,7 +293,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 20,
   },
-
+  toggleButton: {
+    width: 80, // Adjust size as needed
+    height: 40, // Adjust size as needed
+    borderRadius: 20, // Make it round if you like
+    backgroundColor: 'transparent', // Or any background color you want
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20, //Example margin
+    alignSelf: 'center', // Center the button
+    borderWidth: 1, // Add border if needed
+    borderColor: 'gray', // Border color
+  },
 })
 
 export default Timescreen
