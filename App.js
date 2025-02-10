@@ -23,11 +23,6 @@ const App = () => {
                     component={Timescreen}
                     options={{ title: 'Home | Time of Screen' }}
                 />
-                 <Stack.Screen
-                    name="gpt"
-                    component={GPT}
-                    options={{ title: 'Home | gpt of Screen' }}
-                />
             </Stack.Navigator>
         </NavigationContainer>
 
