@@ -105,10 +105,10 @@ const Timescreen = () => {
     const updatedCard = card.map((cardItem) =>
       cardItem.id === item.id ? { ...cardItem, Buy: true } : cardItem
     );
-    setcard(updatedCard); // update the state with the updated cards
+    setcard(updatedCard); 
 
     try {
-      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedCard)); // save to async storage
+      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedCard)); 
     } catch (error) {
       console.log('Error:', error);
     }
@@ -124,10 +124,10 @@ const Timescreen = () => {
     const updatedCard = card.map((cardItem) =>
       cardItem.id === item.id ? { ...cardItem, Buy: false } : cardItem
     );
-    setcard(updatedCard); // update the state with the updated cards
+    setcard(updatedCard); 
 
     try {
-      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedCard)); // save to async storage
+      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedCard)); 
     } catch (error) {
       console.log('Error:', error);
     }
@@ -149,11 +149,10 @@ const Timescreen = () => {
   }
 
   const TotalCost = () => {
-    // Calculate the total price for unpurchased items
     const totalCost = card
-      .filter((item) => !item.Buy) // Filter out purchased items
-      .reduce((total, item) => total + parseFloat(item.price), 0) // Sum prices
-      .toFixed(2); // Format the total price to 2 decimal places
+      .filter((item) => !item.Buy) 
+      .reduce((total, item) => total + parseFloat(item.price), 0) 
+      .toFixed(2); 
     return totalCost
   }
 
@@ -285,25 +284,25 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   clearAllButton: {
-    position: 'absolute', // ทำให้ปุ่มอยู่ที่ตำแหน่งคงที่
-    bottom: 20, // เว้นจากขอบล่าง
-    left: 20, // เว้นจากขอบซ้าย
-    backgroundColor: '#007bff', // สีพื้นหลังของปุ่ม
+    position: 'absolute', 
+    bottom: 20, 
+    left: 20, 
+    backgroundColor: '#007bff', 
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 20,
   },
   toggleButton: {
-    width: 80, // Adjust size as needed
-    height: 40, // Adjust size as needed
-    borderRadius: 20, // Make it round if you like
-    backgroundColor: 'transparent', // Or any background color you want
+    width: 80, 
+    height: 40, 
+    borderRadius: 20, 
+    backgroundColor: 'transparent',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 20, //Example margin
-    alignSelf: 'center', // Center the button
-    borderWidth: 1, // Add border if needed
-    borderColor: 'gray', // Border color
+    marginTop: 20, 
+    alignSelf: 'center', 
+    borderWidth: 1, 
+    borderColor: 'gray',
   },
 })
 
