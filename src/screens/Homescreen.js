@@ -10,19 +10,14 @@ const HomeScreen = ({ navigation }) => {
             <Text style={styles.TextStyle}>List of Screen!</Text>
             <View style={styles.button}>
                 <CustomButtom style = {styles.button}
-                    title="Go to gpt Screen"//eieieieiei
-                    onPress={() => { navigation.navigate("gpt") }}
-                    backgroundColor='grey'
-                />
-                <CustomButtom style = {styles.button}
                     title="Go to Time Screen"
                     onPress={() => { navigation.navigate('Time') }}
-                    backgroundColor='purple'//eieieieieiei
+                    backgroundColor='purple'
                 />
             </View>
         </View>
-    );//eieieieieeieieieieieei
-}//eieieieieieiposdjfdklfhgnkfjgdfkghjdftg
+    );
+}
 
 
 const styles = StyleSheet.create({
